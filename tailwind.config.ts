@@ -14,6 +14,18 @@ const config: Config = withMT({
         "gradient-conic":
           "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
       },
+      colors: {
+        "accent-blue": "#59CAEE",
+        "accent-green": "#5EEAD4",
+        "primary-text": "#E2E8F0",
+        "secondary-text": "#94A3B8",
+        "secondary-darken-text": "#64748B",
+        "dark-base": "#1A191D",
+        "dark-lighten-1": "#202022",
+        "dark-lighten-2": "#313438",
+        "dark-lighten-3": "#555759",
+        "hover": "rgba(45, 152, 212, 0.5)"
+      },
     },
   },
   plugins: [],
