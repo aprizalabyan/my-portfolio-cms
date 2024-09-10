@@ -19,6 +19,7 @@ const config: Config = withMT({
       },
       colors: {
         "accent-blue": "#59CAEE",
+        "accent-blue-darken-1": "#25B7E4",
         "accent-green": "#5EEAD4",
         "primary-text": "#E2E8F0",
         "secondary-text": "#94A3B8",
