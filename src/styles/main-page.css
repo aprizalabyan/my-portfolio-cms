@@ -1,4 +1,19 @@
 .main-layout {
-  width: 100%;
+  width: 100vw;
   height: 100vh;
+  display: flex;
+}
+
+.main-layout .sidebar {
+  width: 240px;
+}
+
+.main-layout .topbar {
+  width: calc(100vw - 240px);
+  height: 64px;
+}
+
+.main-layout .main-content {
+  height: calc(100vh - 64px);
+  width: 100%;
 }

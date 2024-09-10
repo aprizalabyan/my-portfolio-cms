@@ -1,8 +1,10 @@
+"use client"
+
 import React from 'react'
 
 const HomePage = () => {
   return (
-    <div>HomePage</div>
+    <div className="">HomePage</div>
   )
 }
 
