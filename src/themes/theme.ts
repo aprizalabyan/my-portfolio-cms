@@ -18,6 +18,9 @@ const theme = {
   input: {
     styles: {
       base: {
+        container: {
+          minWidth: "",
+        },
         input: {
           fontFamily: "font-inter",
         }

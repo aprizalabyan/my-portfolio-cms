@@ -4,6 +4,7 @@ import React, { useId } from 'react'
 import { Input, Button } from "@material-tailwind/react";
 
 interface Props {
+  name?: string;
   label?: string;
   placeholder?: string;
   value?: string;
@@ -16,22 +17,23 @@ interface Props {
   onClickAppend?: () => void;
 }
 
-const InputTextField: React.FC<Props> = ({ label, placeholder, onChange, value, className, type, required, prevendIcon: PrevendIcon, appendIcon: AppendIcon, onClickAppend }) => {
+const InputTextField: React.FC<Props> = ({ name, label, placeholder, onChange, value, className, type, required, prevendIcon: PrevendIcon, appendIcon: AppendIcon, onClickAppend }) => {
   const inputId = useId();
 
   return (
-    <div>
-      <label htmlFor={inputId} className="block text-sm font-medium text-dark-lighten-3">
+    <div className="w-full">
+      {label && <label htmlFor={inputId} className="block text-xs font-semibold text-primary-text mb-2">
         {label}
-      </label>
-      <div className="flex items-center border border-dark-lighten-2 rounded-md shadow-sm bg-dark-lighten-1">
+      </label>}
+      <div className={`flex items-center border border-dark-lighten-2 rounded-md shadow-sm bg-dark-lighten-1 ${className}`}>
         {PrevendIcon && <PrevendIcon className="w-4 h-4 text-dark-lighten-3" />}
         <Input
           id={inputId}
+          name={name}
           type={type || "text"}
           size="md"
           placeholder={placeholder}
-          className="block w-full text-primary-text focus:outline-none border-none placeholder:opacity-100 placeholder:text-dark-lighten-3 sm:text-sm bg-dark-lighten-1"
+          className="block w-full text-primary-text focus:outline-none border-none placeholder:opacity-100 placeholder:text-dark-lighten-3 text-xs bg-dark-lighten-1"
           labelProps={{
             className: "hidden",
           }}

@@ -8,20 +8,20 @@ interface Props {
   onClick: () => void;
   className?: string;
   icon?: React.ComponentType<React.SVGProps<SVGSVGElement>>;
+  disabled?: boolean;
   type?: "button" | "submit" | "reset";
   size?: "sm" | "md" | "lg";
-  variant?: "filled" | "outlined" | "gradient" | "text";
 }
 
-const PrimaryButton: React.FC<Props> = ({ children, onClick, className, icon: Icon, type, size, variant }) => {
+const PrimaryButton: React.FC<Props> = ({ children, onClick, className, icon: Icon, disabled, type, size }) => {
   return (
-    <Button 
-      type={type} 
-      size={size} 
-      variant={variant} 
-      ripple={false} 
-      onClick={onClick} 
-      className={`flex justify-center gap-2 items-center px-2 py-2 rounded shadow-sm normal-case ${className}`}
+    <Button
+      type={type}
+      size={size}
+      variant="filled"
+      disabled={disabled}
+      onClick={onClick}
+      className={`text-xs font-medium flex justify-center gap-2 items-center px-3 py-2 rounded-md text-dark-base bg-accent-blue hover:bg-accent-blue-darken-1 active:opacity-100 focus:opacity-100 ${className}`}
     >
       {Icon && <Icon className="w-4 h-4" />}
       {children}

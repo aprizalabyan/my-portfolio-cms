@@ -31,7 +31,7 @@ const LoginPage = () => {
               required
               onClickAppend={() => setShowPass(!showPass)}
             ></InputTextField>
-            <PrimaryButton onClick={() => {}} type="button" className="bg-accent-blue text-dark-base min-w-20 text-sm font-medium mt-2">Login</PrimaryButton>
+            <PrimaryButton onClick={() => {}} type="button" className="min-w-20 mt-2">Login</PrimaryButton>
           </div>
         </div>
       </div>

@@ -7,7 +7,7 @@ interface Props {
   children?: React.ReactNode;
   onClick: () => void;
   className?: string;
-  icon?: React.ComponentType<React.SVGProps<SVGSVGElement>>;
+  icon?: React.ForwardRefExoticComponent<Omit<React.SVGProps<SVGSVGElement>, "ref"> & React.RefAttributes<SVGSVGElement>>;
   disabled?: boolean;
   type?: "button" | "submit" | "reset";
   size?: "sm" | "md" | "lg";
@@ -22,7 +22,7 @@ const FlatButton: React.FC<Props> = ({ children, onClick, className, icon: Icon,
       ripple={false}
       disabled={disabled}
       onClick={onClick} 
-      className={`text-xs font-medium flex justify-center gap-2 items-center px-3 py-2 rounded-md text-primary-text active:opacity-75 ${className}`}
+      className={`text-xs font-medium flex justify-center gap-2 items-center px-3 py-2 rounded-md active:opacity-75 ${className}`}
     >
       {Icon && <Icon className="w-4 h-4" />}
       {children}
