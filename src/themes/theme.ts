@@ -23,7 +23,7 @@ const theme = {
         },
         input: {
           fontFamily: "font-inter",
-        }
+        },
       },
       variants: {
         outlined: {
@@ -34,13 +34,35 @@ const theme = {
               },
               input: {
                 py: "py-2",
-              }
-            }
-          }
-        }
-      }
-    }
-  }
+              },
+            },
+          },
+        },
+      },
+    },
+  },
+  chip: {
+    styles: {
+      base: {
+        chip: {
+          fontFamily: "font-inter",
+          fontWeight: " font-normal",
+          textTransform: "none",
+        },
+        action: {
+          rounded: "rounded-full"
+        },
+      },
+      sizes: {
+        sm: {
+          action: {
+            width: "w-4",
+            height: "h-4",
+          },
+        },
+      },
+    },
+  },
 };
 
 export default theme;
