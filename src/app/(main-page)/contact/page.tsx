@@ -6,22 +6,17 @@ import SecondaryButton from '@/components/button/SecondaryButton';
 import FlatButton from '@/components/button/FlatButton';
 import InputTextField from '@/components/form/InputTextField';
 import { TrashIcon } from "@heroicons/react/24/solid"
-
-interface Contact {
-  type: string;
-  title: string;
-  url: string;
-}
+import { IContact } from '@/interfaces/common';
 
 const ContactPage = () => {
-  const [dataEmail, setDataEmail] = useState<Contact[]>([
+  const [dataEmail, setDataEmail] = useState<IContact[]>([
     {
       type: "",
       title: "",
       url: ""
     }
   ])
-  const [dataSocmed, setDataSocmed] = useState<Contact[]>([
+  const [dataSocmed, setDataSocmed] = useState<IContact[]>([
     {
       type: "",
       title: "",

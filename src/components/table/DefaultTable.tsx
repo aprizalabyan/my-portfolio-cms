@@ -3,22 +3,11 @@
 import React from 'react'
 import { Avatar, Menu, MenuHandler, MenuList, MenuItem } from "@material-tailwind/react";
 import { PencilIcon, TrashIcon, EllipsisVerticalIcon } from "@heroicons/react/24/solid";
-
-interface TableHead {
-  text: string;
-  width: string;
-}
-
-interface TableRow {
-  title: string;
-  description: string;
-  url: string;
-  image: string;
-}
+import { ITableHead, ITableRow } from '@/interfaces/common';
 
 interface Props {
-  header: TableHead[];
-  data: TableRow[];
+  header: ITableHead[];
+  data: ITableRow[];
   onClickEdit: (e: any) => void;
   onClickDelete: (e: any) => void;
 }
@@ -44,7 +33,7 @@ const DefaultTable: React.FC<Props> = ({ header, data, onClickEdit, onClickDelet
         </thead>
         <tbody>
           {data.map(
-            ({ title, description, url, image }, index) => {
+            (item, index) => {
               const isLast = index === data.length - 1;
               const classes = isLast
                 ? "p-2"
@@ -57,22 +46,22 @@ const DefaultTable: React.FC<Props> = ({ header, data, onClickEdit, onClickDelet
                   </td>
                   <td className={classes}>
                     <div className="flex items-center gap-3">
-                      <Avatar src={image} alt={title} size="sm" variant="square" />
+                      <Avatar src={item.image} alt={item.title} size="sm" variant="square" />
                     </div>
                   </td>
                   <td className={classes}>
                     <div className="">
-                      <span className="text-xs text-secondary-text">{title}</span>
+                      <span className="text-xs text-secondary-text">{item.title}</span>
                     </div>
                   </td>
                   <td className={classes}>
                     <div className="">
-                      <span className="text-xs text-secondary-text">{description}</span>
+                      <span className="text-xs text-secondary-text">{item.description}</span>
                     </div>
                   </td>
                   <td className={classes}>
                     <div className="">
-                      <span className="text-xs text-secondary-text">{url}</span>
+                      <span className="text-xs text-secondary-text">{item.url}</span>
                     </div>
                   </td>
                   <td className={classes}>
@@ -82,7 +71,7 @@ const DefaultTable: React.FC<Props> = ({ header, data, onClickEdit, onClickDelet
                           <EllipsisVerticalIcon className="w-4 h-4 cursor-pointer text-secondary-text" />
                         </MenuHandler>
                         <MenuList className="bg-dark-lighten-1 border-none text-primary-text p-1">
-                          <MenuItem className="flex gap-2 items-center" onClick={() => onClickEdit(index)}>
+                          <MenuItem className="flex gap-2 items-center" onClick={() => onClickEdit(item)}>
                             <PencilIcon className="w-4 h-4" />
                             Edit
                           </MenuItem>

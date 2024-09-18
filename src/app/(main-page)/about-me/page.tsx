@@ -8,31 +8,7 @@ import PrimaryButton from "@/components/button/PrimaryButton"
 import SecondaryButton from "@/components/button/SecondaryButton"
 import FlatButton from "@/components/button/FlatButton"
 import { TrashIcon } from "@heroicons/react/24/solid"
-
-interface IDetails {
-  header: string;
-  subheader: string;
-  description: string;
-}
-
-interface ISubcategory {
-  title: string;
-  value: string;
-}
-
-interface IExpertise {
-  category: string;
-  data: ISubcategory[];
-}
-
-interface IExperience {
-  year: string;
-  position: string;
-  company: string;
-  description: string;
-  tags: string[];
-  inputTag: string;
-}
+import { IDetails, IExpertise, IExperience } from "@/interfaces/common"
 
 const AboutmePage = () => {
   const [dataDetails, setDataDetails] = useState<IDetails>({
