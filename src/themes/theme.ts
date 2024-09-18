@@ -63,6 +63,25 @@ const theme = {
       },
     },
   },
+  menu: {
+    styles: {
+      base: {
+        menu: {
+          minWidth: "",
+          fontFamily: "font-inter",
+          fontSize: "text-xs",
+          borderRadius: "rounded-md",
+        },
+        item: {
+          initial: {
+            borderRadius: "rounded-md",
+            bg: "hover:bg-hover",
+            color: "hover:text-primary-text",
+          }
+        }
+      }
+    }
+  },
 };
 
 export default theme;
