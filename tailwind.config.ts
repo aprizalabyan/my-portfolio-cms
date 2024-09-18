@@ -28,7 +28,7 @@ const config: Config = withMT({
         "dark-lighten-1": "#202022",
         "dark-lighten-2": "#313438",
         "dark-lighten-3": "#555759",
-        "hover": "rgba(45, 152, 212, 0.5)"
+        "hover": "rgba(45, 152, 212, 0.05)"
       },
     },
   },
