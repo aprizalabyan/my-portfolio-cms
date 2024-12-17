@@ -11,13 +11,14 @@ interface Props {
   className?: string;
   type?: string,
   required?: boolean;
+  disabled?: boolean;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   prevendIcon?: React.ForwardRefExoticComponent<Omit<React.SVGProps<SVGSVGElement>, "ref"> & React.RefAttributes<SVGSVGElement>>;
   appendIcon?: React.ForwardRefExoticComponent<Omit<React.SVGProps<SVGSVGElement>, "ref"> & React.RefAttributes<SVGSVGElement>>;
   onClickAppend?: () => void;
 }
 
-const InputTextField: React.FC<Props> = ({ name, label, placeholder, onChange, value, className, type, required, prevendIcon: PrevendIcon, appendIcon: AppendIcon, onClickAppend }) => {
+const InputTextField: React.FC<Props> = ({ name, label, placeholder, onChange, value, className, type, required, disabled, prevendIcon: PrevendIcon, appendIcon: AppendIcon, onClickAppend }) => {
   const inputId = useId();
 
   return (
@@ -33,12 +34,13 @@ const InputTextField: React.FC<Props> = ({ name, label, placeholder, onChange, v
           type={type || "text"}
           size="md"
           placeholder={placeholder}
-          className="block w-full text-primary-text focus:outline-none border-none placeholder:opacity-100 placeholder:text-dark-lighten-3 text-xs bg-dark-lighten-1"
+          className="block w-full text-primary-text focus:outline-none border-none placeholder:opacity-100 placeholder:text-dark-lighten-3 text-xs bg-dark-lighten-1 disabled:bg-dark-lighten-1"
           labelProps={{
             className: "hidden",
           }}
           onChange={onChange}
           value={value}
+          disabled={disabled}
           required={required}
         />
         {AppendIcon && <div className="ps-0 pe-3">

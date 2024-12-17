@@ -11,10 +11,11 @@ interface Props {
   className?: string;
   rows?: number,
   required?: boolean;
+  disabled?: boolean;
   onChange?: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
 }
 
-const InputTextArea: React.FC<Props> = ({ name, label, placeholder, onChange, value, className, rows, required }) => {
+const InputTextArea: React.FC<Props> = ({ name, label, placeholder, onChange, value, className, rows, required, disabled }) => {
   const inputId = useId();
 
   return (
@@ -29,12 +30,13 @@ const InputTextArea: React.FC<Props> = ({ name, label, placeholder, onChange, va
           rows={rows}
           variant="static"
           placeholder={placeholder}
-          className="block w-full !py-2 px-3 !m-0 text-primary-text focus:outline-none border-none placeholder:opacity-100 placeholder:text-dark-lighten-3 text-xs bg-dark-lighten-1"
+          className="block w-full !py-2 px-3 !m-0 text-primary-text focus:outline-none border-none placeholder:opacity-100 placeholder:text-dark-lighten-3 text-xs bg-dark-lighten-1 disabled:bg-dark-lighten-1"
           labelProps={{
             className: "hidden",
           }}
           onChange={onChange}
           value={value}
+          disabled={disabled}
           required={required}
         />
       </div>
