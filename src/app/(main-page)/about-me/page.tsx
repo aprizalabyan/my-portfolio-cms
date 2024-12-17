@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect, useRef } from "react"
 import InputTextField from "@/components/form/InputTextField"
 import InputChipField from "@/components/form/InputChipField"
 import InputTextArea from "@/components/form/InputTextArea"
@@ -9,9 +9,12 @@ import SecondaryButton from "@/components/button/SecondaryButton"
 import FlatButton from "@/components/button/FlatButton"
 import { TrashIcon } from "@heroicons/react/24/solid"
 import { IDetails, IExpertise, IExperience } from "@/interfaces/common"
+import { useAboutStore } from "@/store/about";
 
 const AboutmePage = () => {
-  const [dataDetails, setDataDetails] = useState<IDetails>({
+  const isMounted = useRef(false)
+  const { s_dataAbout, loading_about, getAboutData, updateAboutData } = useAboutStore()
+  const [dataAbout, setDataAbout] = useState<IDetails>({
     header: "",
     subheader: "",
     description: "",
@@ -37,14 +40,23 @@ const AboutmePage = () => {
       inputTag: ""
     }
   ])
+  const [isEdited, setIsEdited] = useState({
+    details: false,
+    expertise: false,
+    experience: false,
+  });
 
   const handleInputDetails = (e: any) => {
     const { name, value } = e.target;
-    setDataDetails({ ...dataDetails, [name]: value })
+    setDataAbout({ ...dataAbout, [name]: value })
   }
 
-  const handleSaveDetails = () => {
-    console.log("save", dataDetails);
+  const handleSaveDetails = async () => {
+    try {
+      const res = await updateAboutData(dataAbout)
+      if (res.status == 200)
+        setIsEdited((item) => ({ ...item, details: false }));
+    } catch (err: any) { }
   }
 
   const handleInputExpertise = (e: React.ChangeEvent<HTMLInputElement>, catIndex: number, subcatIndex: number | null) => {
@@ -153,6 +165,21 @@ const AboutmePage = () => {
     console.log("save", dataExperience);
   }
 
+  useEffect(() => {
+    if (isMounted.current) return
+    isMounted.current = true
+
+    getAboutData();
+  }, [])
+
+  useEffect(() => {
+    setDataAbout(s_dataAbout)
+  }, [s_dataAbout])
+
+  useEffect(() => {
+    setIsEdited((item) => ({ ...item, details: JSON.stringify(dataAbout) !== JSON.stringify(s_dataAbout) }));
+  }, [dataAbout, s_dataAbout]);
+
   return (
     <div className="about-me flex flex-col gap-6">
       <span className="text-sm font-semibold">About Me</span>
@@ -161,24 +188,37 @@ const AboutmePage = () => {
           <InputTextField
             label="Header"
             name="header"
-            value={dataDetails.header}
+            placeholder={loading_about ? "Loading..." : ""}
+            value={dataAbout.header}
+            disabled={loading_about}
             onChange={(e) => handleInputDetails(e)}
           ></InputTextField>
           <InputTextArea
             label="Sub-header"
             name="subheader"
             rows={10}
-            value={dataDetails.subheader}
+            placeholder={loading_about ? "Loading..." : ""}
+            value={dataAbout.subheader}
+            disabled={loading_about}
             onChange={(e) => handleInputDetails(e)}
           ></InputTextArea>
           <InputTextArea
             label="Other Description"
             name="description"
             rows={10}
-            value={dataDetails.description}
+            placeholder={loading_about ? "Loading..." : ""}
+            value={dataAbout.description}
+            disabled={loading_about}
             onChange={(e) => handleInputDetails(e)}
           ></InputTextArea>
-          <PrimaryButton onClick={handleSaveDetails} type="button" className="w-fit">Save</PrimaryButton>
+          <PrimaryButton
+            onClick={handleSaveDetails}
+            type="button"
+            className="w-fit"
+            disabled={loading_about || !isEdited.details}
+          >
+            Save
+          </PrimaryButton>
         </div>
         <div className="right-section col-span-7 flex flex-col gap-4" style={{ maxWidth: "80%" }}>
           <div className="flex flex-col gap-2">
