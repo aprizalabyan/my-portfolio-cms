@@ -10,10 +10,12 @@ import FlatButton from "@/components/button/FlatButton"
 import { TrashIcon } from "@heroicons/react/24/solid"
 import { IDetails, IExpertise, IExperience } from "@/interfaces/common"
 import { useAboutStore } from "@/store/about";
+import { useExpertiseStore } from "@/store/expertise";
 
 const AboutmePage = () => {
   const isMounted = useRef(false)
   const { s_dataAbout, loading_about, getAboutData, updateAboutData } = useAboutStore()
+  const { s_dataExpertise, loading_expertise, getExpertiseData, updateExpertiseData } = useExpertiseStore()
   const [dataAbout, setDataAbout] = useState<IDetails>({
     header: "",
     subheader: "",
@@ -22,9 +24,9 @@ const AboutmePage = () => {
   const [dataExpertise, setDataExpertise] = useState<IExpertise[]>([
     {
       category: "",
-      data: [
+      sub_category: [
         {
-          title: "",
+          name: "",
           value: "",
         }
       ]
@@ -56,7 +58,12 @@ const AboutmePage = () => {
       const res = await updateAboutData(dataAbout)
       if (res.status == 200)
         setIsEdited((item) => ({ ...item, details: false }));
-    } catch (err: any) { }
+    } catch (err: any) {
+    } finally {
+      setTimeout(() => {
+        getExpertiseData()
+      }, 500);
+    }
   }
 
   const handleInputExpertise = (e: React.ChangeEvent<HTMLInputElement>, catIndex: number, subcatIndex: number | null) => {
@@ -66,8 +73,8 @@ const AboutmePage = () => {
     if (subcatIndex === null) {
       updatedExpertise[catIndex].category = value
     } else {
-      updatedExpertise[catIndex].data[subcatIndex] = {
-        ...updatedExpertise[catIndex].data[subcatIndex],
+      updatedExpertise[catIndex].sub_category[subcatIndex] = {
+        ...updatedExpertise[catIndex].sub_category[subcatIndex],
         [name]: value
       }
     }
@@ -80,9 +87,9 @@ const AboutmePage = () => {
       ...dataExpertise,
       {
         category: "",
-        data: [
+        sub_category: [
           {
-            title: "",
+            name: "",
             value: "",
           }
         ]
@@ -97,18 +104,27 @@ const AboutmePage = () => {
 
   const addExpertiseSubcat = (catIndex: number) => {
     const updatedExpertise = [...dataExpertise]
-    updatedExpertise[catIndex].data.push({ title: "", value: "" })
+    updatedExpertise[catIndex].sub_category.push({ name: "", value: "" })
     setDataExpertise(updatedExpertise)
   }
 
   const removeExpertiseSubcat = (catIndex: number, subcatIndex: number) => {
     const updatedExpertise = [...dataExpertise]
-    updatedExpertise[catIndex].data = updatedExpertise[catIndex].data.filter((_, index) => index !== subcatIndex)
+    updatedExpertise[catIndex].sub_category = updatedExpertise[catIndex].sub_category.filter((_, index) => index !== subcatIndex)
     setDataExpertise(updatedExpertise)
   }
 
-  const handleSaveExpertise = () => {
-    console.log("save", dataExpertise);
+  const handleSaveExpertise = async () => {
+    try {
+      const res = await updateExpertiseData(dataExpertise)
+      if (res.status == 200)
+        setIsEdited((item) => ({ ...item, expertise: false }));
+    } catch (err: any) {
+    } finally {
+      setTimeout(() => {
+        getExpertiseData()
+      }, 500);
+    }
   }
 
   const handleInputExperience = (e: any, expIndex: number, isTag: boolean) => {
@@ -169,6 +185,7 @@ const AboutmePage = () => {
     if (isMounted.current) return
     isMounted.current = true
 
+    getExpertiseData();
     getAboutData();
   }, [])
 
@@ -177,8 +194,17 @@ const AboutmePage = () => {
   }, [s_dataAbout])
 
   useEffect(() => {
+    const deepCopiedProfiles = JSON.parse(JSON.stringify(s_dataExpertise));
+    setDataExpertise(deepCopiedProfiles)
+  }, [s_dataExpertise])
+
+  useEffect(() => {
     setIsEdited((item) => ({ ...item, details: JSON.stringify(dataAbout) !== JSON.stringify(s_dataAbout) }));
   }, [dataAbout, s_dataAbout]);
+
+  useEffect(() => {
+    setIsEdited((item) => ({ ...item, expertise: JSON.stringify(dataExpertise) !== JSON.stringify(s_dataExpertise) }));
+  }, [dataExpertise, s_dataExpertise]);
 
   return (
     <div className="about-me flex flex-col gap-6">
@@ -228,32 +254,35 @@ const AboutmePage = () => {
                 <div className="grid grid-cols-10 gap-2 w-full" key={index1}>
                   <div className="col-span-4">
                     <InputTextField
-                      placeholder="Category"
+                      placeholder={loading_expertise ? "Loading..." : "Category"}
                       name="category"
                       value={expertise.category}
+                      disabled={loading_expertise}
                       onChange={(e) => handleInputExpertise(e, index1, null)}
                     ></InputTextField>
                   </div>
                   <div className="flex flex-col gap-2 col-span-6">
-                    {expertise.data.map((subcategory, index2) => {
+                    {expertise.sub_category.map((subcategory, index2) => {
                       return (
                         <div className="flex gap-2" key={index2}>
                           <InputTextField
-                            placeholder="Sub-category"
-                            name="title"
-                            value={subcategory.title}
+                            placeholder={loading_expertise ? "Loading..." : "Sub-category"}
+                            name="name"
+                            value={subcategory.name}
+                            disabled={loading_expertise}
                             onChange={(e) => handleInputExpertise(e, index1, index2)}
                           ></InputTextField>
                           <div className="w-32">
                             <InputTextField
-                              placeholder="value"
+                              placeholder={loading_expertise ? "Loading..." : "Value"}
                               name="value"
                               value={subcategory.value}
+                              disabled={loading_expertise}
                               onChange={(e) => handleInputExpertise(e, index1, index2)}
                             ></InputTextField>
                           </div>
                           <FlatButton className="text-dark-lighten-3 p-1" icon={TrashIcon} onClick={() => {
-                            if (expertise.data.length < 2) removeExpertiseCategory(index1)
+                            if (expertise.sub_category.length < 2) removeExpertiseCategory(index1)
                             else removeExpertiseSubcat(index1, index2)
                           }}></FlatButton>
                         </div>
@@ -267,7 +296,14 @@ const AboutmePage = () => {
           </div>
           <div className="flex gap-2">
             <SecondaryButton onClick={addExpertiseCategory} type="button" className="w-fit">Add category +</SecondaryButton>
-            <PrimaryButton onClick={handleSaveExpertise} type="button" className="w-fit">Save</PrimaryButton>
+            <PrimaryButton
+              onClick={handleSaveExpertise}
+              type="button"
+              className="w-fit"
+              disabled={loading_expertise || !isEdited.expertise}
+            >
+              Save
+            </PrimaryButton>
           </div>
           <hr style={{ opacity: 0.2 }} />
           <div className="flex flex-col gap-2">

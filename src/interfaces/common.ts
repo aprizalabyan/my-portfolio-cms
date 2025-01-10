@@ -5,13 +5,13 @@ export interface IDetails {
 }
 
 export interface ISubcategory {
-  title: string;
+  name: string;
   value: string;
 }
 
 export interface IExpertise {
   category: string;
-  data: ISubcategory[];
+  sub_category: ISubcategory[];
 }
 
 export interface IExperience {
