@@ -11,11 +11,13 @@ import { TrashIcon } from "@heroicons/react/24/solid"
 import { IDetails, IExpertise, IExperience } from "@/interfaces/common"
 import { useAboutStore } from "@/store/about";
 import { useExpertiseStore } from "@/store/expertise";
+import { useExperienceStore } from "@/store/experience";
 
 const AboutmePage = () => {
   const isMounted = useRef(false)
   const { s_dataAbout, loading_about, getAboutData, updateAboutData } = useAboutStore()
   const { s_dataExpertise, loading_expertise, getExpertiseData, updateExpertiseData } = useExpertiseStore()
+  const { s_dataExperience, loading_experience, getExperienceData, updateExperienceData } = useExperienceStore()
   const [dataAbout, setDataAbout] = useState<IDetails>({
     header: "",
     subheader: "",
@@ -177,14 +179,24 @@ const AboutmePage = () => {
     setDataExperience(updatedExperience)
   };
 
-  const handleSaveExperience = () => {
-    console.log("save", dataExperience);
+  const handleSaveExperience = async () => {
+    try {
+      const res = await updateExperienceData(dataExperience)
+      if (res.status == 200)
+        setIsEdited((item) => ({ ...item, experience: false }));
+    } catch (err: any) {
+    } finally {
+      setTimeout(() => {
+        getExperienceData()
+      }, 500);
+    }
   }
 
   useEffect(() => {
     if (isMounted.current) return
     isMounted.current = true
 
+    getExperienceData()
     getExpertiseData();
     getAboutData();
   }, [])
@@ -194,9 +206,14 @@ const AboutmePage = () => {
   }, [s_dataAbout])
 
   useEffect(() => {
-    const deepCopiedProfiles = JSON.parse(JSON.stringify(s_dataExpertise));
-    setDataExpertise(deepCopiedProfiles)
+    const deepCopiedExpertise = JSON.parse(JSON.stringify(s_dataExpertise));
+    setDataExpertise(deepCopiedExpertise)
   }, [s_dataExpertise])
+
+  useEffect(() => {
+    const deepCopiedExperience = JSON.parse(JSON.stringify(s_dataExperience));
+    setDataExperience(deepCopiedExperience)
+  }, [s_dataExperience])
 
   useEffect(() => {
     setIsEdited((item) => ({ ...item, details: JSON.stringify(dataAbout) !== JSON.stringify(s_dataAbout) }));
@@ -205,6 +222,10 @@ const AboutmePage = () => {
   useEffect(() => {
     setIsEdited((item) => ({ ...item, expertise: JSON.stringify(dataExpertise) !== JSON.stringify(s_dataExpertise) }));
   }, [dataExpertise, s_dataExpertise]);
+
+  useEffect(() => {
+    setIsEdited((item) => ({ ...item, experience: JSON.stringify(dataExperience) !== JSON.stringify(s_dataExperience) }));
+  }, [dataExperience, s_dataExperience]);
 
   return (
     <div className="about-me flex flex-col gap-6">
@@ -315,30 +336,34 @@ const AboutmePage = () => {
                     <div className="flex gap-2">
                       <div className="w-64">
                         <InputTextField
-                          placeholder="Year"
+                          placeholder={loading_experience ? "Loading..." : "Year"}
                           name="year"
                           value={experience.year}
+                          disabled={loading_experience}
                           onChange={(e) => handleInputExperience(e, index, false)}
                         ></InputTextField>
                       </div>
                       <InputTextField
-                        placeholder="Position"
+                        placeholder={loading_experience ? "Loading..." : "Position"}
                         name="position"
                         value={experience.position}
+                        disabled={loading_experience}
                         onChange={(e) => handleInputExperience(e, index, false)}
                       ></InputTextField>
                       <InputTextField
-                        placeholder="Company"
+                        placeholder={loading_experience ? "Loading..." : "Company"}
                         name="company"
                         value={experience.company}
+                        disabled={loading_experience}
                         onChange={(e) => handleInputExperience(e, index, false)}
                       ></InputTextField>
                     </div>
                     <InputTextArea
-                      placeholder="Description"
+                      placeholder={loading_experience ? "Loading..." : "Description"}
                       name="description"
                       rows={6}
                       value={experience.description}
+                      disabled={loading_experience}
                       onChange={(e) => handleInputExperience(e, index, false)}
                     ></InputTextArea>
                     <InputChipField
@@ -346,6 +371,7 @@ const AboutmePage = () => {
                       name="tags"
                       value={experience.inputTag}
                       chips={experience.tags}
+                      disabled={loading_experience}
                       onChange={(e) => handleInputExperience(e, index, true)}
                       onKeyDown={(e) => handleKeyDown(e, index)}
                       onDeleteChip={(chipIndex) => handleDeleteChip(chipIndex, index)}
@@ -358,7 +384,14 @@ const AboutmePage = () => {
           </div>
           <div className="flex gap-2">
             <SecondaryButton onClick={addExperience} type="button" className="w-fit">Add experience +</SecondaryButton>
-            <PrimaryButton onClick={handleSaveExperience} type="button" className="w-fit">Save</PrimaryButton>
+            <PrimaryButton
+              onClick={handleSaveExperience}
+              type="button"
+              className="w-fit"
+              disabled={loading_experience || !isEdited.experience}
+            >
+              Save
+            </PrimaryButton>
           </div>
         </div>
       </div>

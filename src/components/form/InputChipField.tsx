@@ -11,13 +11,14 @@ interface Props {
   className?: string;
   type?: string,
   required?: boolean;
+  disabled?: boolean;
   chips: string[];
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onKeyDown?: (e: React.KeyboardEvent<HTMLInputElement>) => void;
   onDeleteChip: (e: number) => void;
 }
 
-const InputChipField: React.FC<Props> = ({ name, label, placeholder, value, className, type, required, chips, onKeyDown, onChange, onDeleteChip }) => {
+const InputChipField: React.FC<Props> = ({ name, label, placeholder, value, className, type, required, chips, disabled, onKeyDown, onChange, onDeleteChip }) => {
   const inputId = useId();
 
   return (
@@ -51,6 +52,7 @@ const InputChipField: React.FC<Props> = ({ name, label, placeholder, value, clas
           onChange={onChange}
           onKeyDown={onKeyDown}
           value={value}
+          disabled={disabled}
           required={required}
         />
       </div>
