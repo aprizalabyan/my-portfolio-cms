@@ -14,6 +14,7 @@ import InputTextArea from "@/components/form/InputTextArea"
 import InputFile from '@/components/form/InputFile';
 import PrimaryButton from "@/components/button/PrimaryButton"
 import SecondaryButton from "@/components/button/SecondaryButton"
+import InputChipField from "@/components/form/InputChipField"
 import { IFormData, IFormParams } from '@/interfaces/common';
 
 interface Props {
@@ -29,8 +30,10 @@ const FormInputProject: React.FC<Props> = ({ openForm, formParams, onClose, onSa
     title: "",
     description: "",
     url: "",
+    tags: [],
     image: null
   })
+  const [inputTag, setInputTag] = useState("")
 
   const handleInputForm = (e: any) => {
     const { name, value, files } = e.target;
@@ -40,6 +43,21 @@ const FormInputProject: React.FC<Props> = ({ openForm, formParams, onClose, onSa
     })
   }
 
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter' && inputTag.trim()) {
+      formData.tags.push(inputTag.trim())
+      setInputTag("")
+    }
+  };
+
+  const handleDeleteChip = (chipIndex: number) => {
+    const newTags = formData.tags.filter((_, i) => i !== chipIndex);
+    setFormData({
+      ...formData,
+      tags: newTags
+    })
+  };
+
   useEffect(() => {
     setOpen(openForm);
     if (formParams.type == "edit") {
@@ -47,6 +65,7 @@ const FormInputProject: React.FC<Props> = ({ openForm, formParams, onClose, onSa
         title: formParams.data.title,
         description: formParams.data.description,
         url: formParams.data.url,
+        tags: formParams.data.tags,
         image: formParams.data.image
       });
     } else {
@@ -54,6 +73,7 @@ const FormInputProject: React.FC<Props> = ({ openForm, formParams, onClose, onSa
         title: "",
         description: "",
         url: "",
+        tags: [],
         image: null
       });
     }
@@ -87,6 +107,16 @@ const FormInputProject: React.FC<Props> = ({ openForm, formParams, onClose, onSa
             value={formData.description}
             onChange={(e) => handleInputForm(e)}
           ></InputTextArea>
+          <InputChipField
+            label="Tags"
+            name="tags"
+            value={inputTag}
+            chips={formData.tags}
+            disabled={false}
+            onChange={(e) => setInputTag(e.target.value)}
+            onKeyDown={(e) => handleKeyDown(e)}
+            onDeleteChip={(chipIndex) => handleDeleteChip(chipIndex)}
+          ></InputChipField>
           <InputTextField
             label="URL"
             name="url"

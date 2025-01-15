@@ -1,7 +1,7 @@
 "use client"
 
 import React from 'react'
-import { Avatar, Menu, MenuHandler, MenuList, MenuItem } from "@material-tailwind/react";
+import { Avatar, Menu, MenuHandler, MenuList, MenuItem, Chip } from "@material-tailwind/react";
 import { PencilIcon, TrashIcon, EllipsisVerticalIcon } from "@heroicons/react/24/solid";
 import { ITableHead, ITableRow } from '@/interfaces/common';
 
@@ -60,6 +60,19 @@ const DefaultTable: React.FC<Props> = ({ header, data, onClickEdit, onClickDelet
                     </div>
                   </td>
                   <td className={classes}>
+                    {item.tags.length > 0 && <div className="flex gap-1">
+                      {item.tags.map((chip, index) => (
+                        <Chip
+                          key={index}
+                          value={chip}
+                          size="sm"
+                          className="bg-dark-lighten-2 text-primary-text rounded-full"
+                          style={{ fontSize: "11px" }}
+                        />
+
+                      ))}</div>}
+                  </td>
+                  <td className={classes}>
                     <div className="">
                       <span className="text-xs text-secondary-text">{item.url}</span>
                     </div>
@@ -75,7 +88,7 @@ const DefaultTable: React.FC<Props> = ({ header, data, onClickEdit, onClickDelet
                             <PencilIcon className="w-4 h-4" />
                             Edit
                           </MenuItem>
-                          <MenuItem className="flex gap-2 items-center"  onClick={() => onClickDelete(index)}>
+                          <MenuItem className="flex gap-2 items-center" onClick={() => onClickDelete(index)}>
                             <TrashIcon className="w-4 h-4" />
                             Delete
                           </MenuItem>

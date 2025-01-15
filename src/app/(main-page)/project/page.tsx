@@ -15,19 +15,23 @@ const ProjectPage = () => {
     },
     {
       text: "Cover",
-      width: "8%"
+      width: "5%"
     },
     {
       text: "Title",
-      width: "25%"
+      width: "20%"
     },
     {
       text: "Description",
-      width: "32%"
+      width: "25%"
+    },
+    {
+      text: "Tag",
+      width: "20%"
     },
     {
       text: "URL",
-      width: "25%"
+      width: "20%"
     },
     {
       text: "",
@@ -40,12 +44,14 @@ const ProjectPage = () => {
         title: "Title 1",
         description: "description",
         url: "https://",
+        tags: ["satu", "dua"],
         image: "https://docs.material-tailwind.com/img/face-2.jpg",
       },
       {
         title: "Title 2",
         description: "description",
         url: "https://",
+        tags: ["dua"],
         image: "https://docs.material-tailwind.com/img/face-2.jpg",
       },
     ],
@@ -60,6 +66,7 @@ const ProjectPage = () => {
       title: "",
       description: "",
       url: "",
+      tags: [],
       image: null
     }
   })

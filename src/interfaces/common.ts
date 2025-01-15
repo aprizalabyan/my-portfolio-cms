@@ -27,6 +27,7 @@ export interface IFormData {
   title: string;
   description: string;
   url: string;
+  tags: string[];
   image: any;
 }
 
@@ -50,5 +51,6 @@ export interface ITableRow {
   title: string;
   description: string;
   url: string;
+  tags: string[];
   image: string;
 }
