@@ -1,11 +1,12 @@
 "use client"
 
-import React, { useState } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import PrimaryButton from '@/components/button/PrimaryButton';
 import DefaultTable from '@/components/table/DefaultTable';
 import DefaultPagination from '@/components/pagination/DefaultPagination';
 import FormInputProject from '@/components/modal/FormInputProject';
-import { IFormParams } from '@/interfaces/common';
+import { IFormParams, IProject } from '@/interfaces/common';
+import { useProjectStore } from '@/store/project'
 
 const ProjectPage = () => {
   const header = [
@@ -58,8 +59,12 @@ const ProjectPage = () => {
     totalData: 36,
     totalPages: 10,
   }
+  const isMounted = useRef(false)
+  const { s_dataProjects, loading_project, getProjectData, addProjectData, updateProjectData, deleteProjectData } = useProjectStore()
+  const [dataProjects, setDataProjects] = useState<IProject[]>([])
   const [currentPage, setCurrentPage] = useState(1);
   const [openForm, setOpenForm] = useState(false);
+  const [editedId, setEditedId] = useState("");
   const [formParams, setFormParams] = useState<IFormParams>({
     type: "add",
     data: {
@@ -84,6 +89,7 @@ const ProjectPage = () => {
   }
 
   const handleEdit = (e: any) => {
+    setEditedId(e.id)
     setOpenForm(true);
     setFormParams({
       type: "edit",
@@ -91,13 +97,48 @@ const ProjectPage = () => {
     });
   }
 
-  const handleSave = (e: any) => {
-    console.log('savee', e);
+  const handleSave = async (e: any) => {
+    try {
+      if (formParams.type == "add") {
+        const res = await addProjectData(e)
+        if (res.status == 200)
+          setOpenForm(false)
+      } else {
+        const payload = { ...e, id: editedId }
+        const res = await updateProjectData(payload)
+        if (res.status == 200)
+          setOpenForm(false)
+      }
+    } catch (err: any) {
+    } finally {
+      setTimeout(() => {
+        getProjectData()
+      }, 500);
+    }
   }
 
-  const handleDelete = (e: any) => {
+  const handleDelete = async (e: any) => {
     console.log('delll', e);
+    try {
+      const res = await deleteProjectData(e.id)
+    } catch (err: any) {
+    } finally {
+      setTimeout(() => {
+        getProjectData()
+      }, 500);
+    }
   }
+
+  useEffect(() => {
+    if (isMounted.current) return
+    isMounted.current = true
+
+    getProjectData();
+  }, [])
+
+  useEffect(() => {
+    setDataProjects(s_dataProjects)
+  }, [s_dataProjects])
 
   return (
     <div className="project-list flex flex-col gap-6">
@@ -106,7 +147,7 @@ const ProjectPage = () => {
         <div className="flex justify-end">
           <PrimaryButton onClick={handleAdd} type="button" className="w-fit">Add Project +</PrimaryButton>
         </div>
-        <DefaultTable header={header} data={projects.data} onClickEdit={handleEdit} onClickDelete={handleDelete} />
+        <DefaultTable header={header} data={dataProjects} loading={loading_project} onClickEdit={handleEdit} onClickDelete={handleDelete} />
         <div className="flex justify-between items-center">
           <div>
             <span className="text-xs font-medium">Total: {projects.totalData} data</span>
