@@ -23,7 +23,7 @@ export interface IExperience {
   inputTag: string;
 }
 
-export interface IFormData {
+export interface IProject {
   title: string;
   description: string;
   url: string;
@@ -33,7 +33,7 @@ export interface IFormData {
 
 export interface IFormParams {
   type: string;
-  data: IFormData;
+  data: IProject;
 }
 
 export interface IContact {

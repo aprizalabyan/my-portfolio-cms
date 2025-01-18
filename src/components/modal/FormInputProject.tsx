@@ -15,18 +15,18 @@ import InputFile from '@/components/form/InputFile';
 import PrimaryButton from "@/components/button/PrimaryButton"
 import SecondaryButton from "@/components/button/SecondaryButton"
 import InputChipField from "@/components/form/InputChipField"
-import { IFormData, IFormParams } from '@/interfaces/common';
+import { IProject, IFormParams } from '@/interfaces/common';
 
 interface Props {
   openForm: boolean;
   formParams: IFormParams;
   onClose: (e: boolean) => void;
-  onSave: (e: IFormData) => void;
+  onSave: (e: IProject) => void;
 }
 
 const FormInputProject: React.FC<Props> = ({ openForm, formParams, onClose, onSave }) => {
   const [open, setOpen] = useState(false);
-  const [formData, setFormData] = useState<IFormData>({
+  const [formData, setFormData] = useState<IProject>({
     title: "",
     description: "",
     url: "",
