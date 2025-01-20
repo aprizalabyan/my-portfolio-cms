@@ -123,15 +123,11 @@ const ProjectPage = () => {
     isMounted.current = true
 
     getProjectData({ page: page, size: pageSize });
-  }, [])
+  }, [page, pageSize])
 
   useEffect(() => {
     setDataProjects(s_dataProjects)
   }, [s_dataProjects])
-
-  useEffect(() => {
-    getProjectData({ page: page, size: pageSize });
-  }, [page, pageSize])
 
   return (
     <div className="project-list flex flex-col gap-6">
