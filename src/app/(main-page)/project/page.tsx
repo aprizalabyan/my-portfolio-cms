@@ -39,30 +39,18 @@ const ProjectPage = () => {
       width: "5%"
     },
   ];
-  const projects = {
-    data: [
-      {
-        title: "Title 1",
-        description: "description",
-        url: "https://",
-        tags: ["satu", "dua"],
-        image: "https://docs.material-tailwind.com/img/face-2.jpg",
-      },
-      {
-        title: "Title 2",
-        description: "description",
-        url: "https://",
-        tags: ["dua"],
-        image: "https://docs.material-tailwind.com/img/face-2.jpg",
-      },
-    ],
-    totalData: 36,
-    totalPages: 10,
-  }
   const isMounted = useRef(false)
-  const { s_dataProjects, loading_project, getProjectData, addProjectData, updateProjectData, deleteProjectData } = useProjectStore()
+  const {
+    s_dataProjects,
+    s_totalItems,
+    s_totalPages,
+    loading_project,
+    getProjectData,
+    addProjectData,
+    updateProjectData,
+    deleteProjectData
+  } = useProjectStore()
   const [dataProjects, setDataProjects] = useState<IProject[]>([])
-  const [currentPage, setCurrentPage] = useState(1);
   const [openForm, setOpenForm] = useState(false);
   const [editedId, setEditedId] = useState("");
   const [formParams, setFormParams] = useState<IFormParams>({
@@ -75,9 +63,11 @@ const ProjectPage = () => {
       image: null
     }
   })
+  const [page, setPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
 
   const handlePageChange = (page: number) => {
-    setCurrentPage(page);
+    setPage(page);
   };
 
   const handleAdd = () => {
@@ -112,19 +102,18 @@ const ProjectPage = () => {
     } catch (err: any) {
     } finally {
       setTimeout(() => {
-        getProjectData()
+        getProjectData({ page: page, size: pageSize })
       }, 500);
     }
   }
 
   const handleDelete = async (e: any) => {
-    console.log('delll', e);
     try {
       const res = await deleteProjectData(e.id)
     } catch (err: any) {
     } finally {
       setTimeout(() => {
-        getProjectData()
+        getProjectData({ page: page, size: pageSize })
       }, 500);
     }
   }
@@ -133,12 +122,16 @@ const ProjectPage = () => {
     if (isMounted.current) return
     isMounted.current = true
 
-    getProjectData();
+    getProjectData({ page: page, size: pageSize });
   }, [])
 
   useEffect(() => {
     setDataProjects(s_dataProjects)
   }, [s_dataProjects])
+
+  useEffect(() => {
+    getProjectData({ page: page, size: pageSize });
+  }, [page, pageSize])
 
   return (
     <div className="project-list flex flex-col gap-6">
@@ -150,9 +143,9 @@ const ProjectPage = () => {
         <DefaultTable header={header} data={dataProjects} loading={loading_project} onClickEdit={handleEdit} onClickDelete={handleDelete} />
         <div className="flex justify-between items-center">
           <div>
-            <span className="text-xs font-medium">Total: {projects.totalData} data</span>
+            <span className="text-xs font-medium">Total: {s_totalItems} data</span>
           </div>
-          <DefaultPagination currentPage={currentPage} totalPages={projects.totalPages} onPageChange={handlePageChange} />
+          <DefaultPagination currentPage={page} totalPages={s_totalPages} onPageChange={handlePageChange} />
         </div>
       </div>
       <FormInputProject formParams={formParams} openForm={openForm} onClose={(e) => setOpenForm(e)} onSave={handleSave} />

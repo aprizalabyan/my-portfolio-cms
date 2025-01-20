@@ -5,12 +5,6 @@ import cloudinary from "@/lib/cloudinary";
 
 const collection = db.collection("project");
 
-export const config = {
-  api: {
-    bodyParser: false,
-  },
-};
-
 async function parseFormData(req: NextRequest) {
   const formData = await req.formData();
   const result: Record<string, any> = {};
@@ -23,7 +17,13 @@ async function parseFormData(req: NextRequest) {
 
 export async function GET(req: NextRequest, res: NextResponse) {
   try {
-    const results = await collection.find({}).toArray();
+    const { searchParams } = new URL(req.url);
+    const page = parseInt(searchParams.get("page") || "1");
+    const size = parseInt(searchParams.get("size") || "10");
+    const skip = (page - 1) * size;
+
+    const totalItems = await collection.countDocuments();
+    const results = await collection.find({}).skip(skip).limit(size).toArray();
     const trResults = results.map((item) => ({
       id: item._id,
       title: item.title,
@@ -35,7 +35,11 @@ export async function GET(req: NextRequest, res: NextResponse) {
 
     return NextResponse.json({
       message: "Success get projects",
-      data: trResults,
+      data: {
+        data: trResults,
+        total_items: totalItems,
+        total_pages: Math.ceil(totalItems / size),
+      },
     });
   } catch (error: any) {
     return NextResponse.json({ error: error.message }, { status: 500 });

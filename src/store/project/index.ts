@@ -4,8 +4,10 @@ import { IProject } from "@/interfaces/common";
 
 interface IProjectState {
   s_dataProjects: IProject[];
+  s_totalItems: number;
+  s_totalPages: number;
   loading_project: boolean;
-  getProjectData: () => Promise<any>;
+  getProjectData: (payload: any) => Promise<any>;
   addProjectData: (payload: any) => Promise<any>;
   updateProjectData: (payload: any) => Promise<any>;
   deleteProjectData: (payload: any) => Promise<any>;
@@ -21,17 +23,24 @@ export const useProjectStore = create<IProjectState>((set) => ({
       image: null,
     },
   ],
+  s_totalItems: 0,
+  s_totalPages: 0,
   loading_project: false,
 
-  getProjectData: async () => {
+  getProjectData: async (payload) => {
     try {
       set({ loading_project: true });
       const res = await axios({
         method: "GET",
         url: "/api/content/project",
+        params: payload,
       });
-      const res_data: IProject[] = res.data.data;
-      set({ s_dataProjects: res_data });
+      const res_data: IProject[] = res.data.data.data;
+      set({
+        s_dataProjects: res_data,
+        s_totalItems: res.data.data.total_items,
+        s_totalPages: res.data.data.total_pages,
+      });
     } catch (err: any) {
     } finally {
       set({ loading_project: false });
