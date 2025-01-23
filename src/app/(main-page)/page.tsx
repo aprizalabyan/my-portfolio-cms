@@ -16,7 +16,7 @@ const HomePage = () => {
     if (isMounted.current) return
     isMounted.current = true
 
-    getUsers()
+    // getUsers()
   }, [])
 
   return (
