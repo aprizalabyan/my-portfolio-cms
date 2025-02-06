@@ -28,6 +28,7 @@ export async function GET(req: NextRequest, res: NextResponse) {
       id: item._id,
       title: item.title,
       description: item.description,
+      year: item.year,
       tags: item.tags,
       url: item.url,
       image: item.image,
@@ -111,6 +112,7 @@ export async function PUT(req: NextRequest, res: NextResponse) {
             $set: {
               title: parsedData.title,
               description: parsedData.description,
+              year: parsedData.year,
               tags: parsedData.tags,
               url: parsedData.url,
               image: imgUrl,
@@ -124,6 +126,7 @@ export async function PUT(req: NextRequest, res: NextResponse) {
             $set: {
               title: parsedData.title,
               description: parsedData.description,
+              year: parsedData.year,
               tags: parsedData.tags,
               url: parsedData.url,
             },

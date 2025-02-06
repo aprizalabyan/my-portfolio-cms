@@ -58,6 +58,11 @@ const DefaultTable: React.FC<Props> = ({ header, data, loading, onClickEdit, onC
                     </td>
                     <td className={classes}>
                       <div className="">
+                        <span className="text-xs text-secondary-text">{item.year}</span>
+                      </div>
+                    </td>
+                    <td className={classes}>
+                      <div className="">
                         <span className="text-xs text-secondary-text">{item.title}</span>
                       </div>
                     </td>

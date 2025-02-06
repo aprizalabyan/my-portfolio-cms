@@ -20,6 +20,7 @@ export const useProjectStore = create<IProjectState>((set) => ({
       description: "",
       tags: [],
       url: "",
+      year: "",
       image: null,
     },
   ],

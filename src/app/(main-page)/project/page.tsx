@@ -19,12 +19,16 @@ const ProjectPage = () => {
       width: "5%"
     },
     {
+      text: "Year",
+      width: "5%"
+    },
+    {
       text: "Title",
       width: "20%"
     },
     {
       text: "Description",
-      width: "25%"
+      width: "20%"
     },
     {
       text: "Tag",
@@ -59,6 +63,7 @@ const ProjectPage = () => {
       title: "",
       description: "",
       url: "",
+      year: "",
       tags: [],
       image: null
     }

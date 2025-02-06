@@ -30,8 +30,9 @@ const FormInputProject: React.FC<Props> = ({ openForm, formParams, onClose, onSa
     title: "",
     description: "",
     url: "",
+    year: "",
     tags: [],
-    image: null
+    image: null,
   })
   const [inputTag, setInputTag] = useState("")
 
@@ -65,6 +66,7 @@ const FormInputProject: React.FC<Props> = ({ openForm, formParams, onClose, onSa
         title: formParams.data.title,
         description: formParams.data.description,
         url: formParams.data.url,
+        year: formParams.data.year,
         tags: formParams.data.tags,
         image: formParams.data.image
       });
@@ -73,6 +75,7 @@ const FormInputProject: React.FC<Props> = ({ openForm, formParams, onClose, onSa
         title: "",
         description: "",
         url: "",
+        year: "",
         tags: [],
         image: null
       });
@@ -107,6 +110,12 @@ const FormInputProject: React.FC<Props> = ({ openForm, formParams, onClose, onSa
             value={formData.description}
             onChange={(e) => handleInputForm(e)}
           ></InputTextArea>
+          <InputTextField
+            label="Year"
+            name="year"
+            value={formData.year}
+            onChange={(e) => handleInputForm(e)}
+          ></InputTextField>
           <InputChipField
             label="Tags"
             name="tags"
