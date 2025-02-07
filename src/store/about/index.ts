@@ -35,7 +35,7 @@ export const useAboutStore = create<IAboutState>((set) => ({
     try {
       set({ loading_about: true });
       const res = await axios({
-        method: "PUT",
+        method: "POST",
         url: "/api/content/about",
         data: payload,
       });

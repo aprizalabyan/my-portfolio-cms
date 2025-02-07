@@ -23,7 +23,7 @@ export async function GET(req: NextRequest, res: NextResponse) {
   }
 }
 
-export async function PUT(req: NextRequest, res: NextResponse) {
+export async function POST(req: NextRequest, res: NextResponse) {
   try {
     const { id, header, subheader, description } = await req.json();
     const results = await collection.updateOne(

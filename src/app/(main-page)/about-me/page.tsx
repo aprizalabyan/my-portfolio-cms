@@ -63,7 +63,7 @@ const AboutmePage = () => {
     } catch (err: any) {
     } finally {
       setTimeout(() => {
-        getExpertiseData()
+        getAboutData()
       }, 500);
     }
   }
