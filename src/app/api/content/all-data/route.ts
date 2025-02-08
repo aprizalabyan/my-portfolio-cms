@@ -10,7 +10,7 @@ export async function GET(req: NextRequest, res: NextResponse) {
       await Promise.all([
         db.collection("about").find({}).toArray(),
         db.collection("contact").find({}).toArray(),
-        db.collection("experience").find({}).toArray(),
+        db.collection("experience").find({}).sort({ _id: -1 }).toArray(),
         db.collection("expertise").find({}).toArray(),
         db.collection("project").find({}).sort({ _id: -1 }).limit(4).toArray(),
       ]);

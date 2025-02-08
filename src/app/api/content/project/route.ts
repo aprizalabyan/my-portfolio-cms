@@ -23,7 +23,7 @@ export async function GET(req: NextRequest, res: NextResponse) {
     const skip = (page - 1) * size;
 
     const totalItems = await collection.countDocuments();
-    const results = await collection.find({}).skip(skip).limit(size).toArray();
+    const results = await collection.find({}).skip(skip).sort({ _id: -1 }).limit(size).toArray();
     const trResults = results.map((item) => ({
       id: item._id,
       title: item.title,
